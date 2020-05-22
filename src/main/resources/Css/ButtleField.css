@@ -1,0 +1,9 @@
+.grid-wrap {
+    -fx-border-color: #915fff;
+    -fx-border-width: 2px;
+}
+
+.grid-wrap .table-cell{
+    -fx-border-color: #915fff;
+    -fx-border-width: 2px;
+}
