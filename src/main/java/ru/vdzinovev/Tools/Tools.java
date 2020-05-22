@@ -29,9 +29,8 @@ public final class Tools {
      * @param header Краткое описание сообщения
      * @param content Полное описание сообщения
      *                или StackTrace ошибки
-     * @return Окно сообщения
      */
-    private static Alert showMessage(final Alert.AlertType type,
+    private static void showMessage(final Alert.AlertType type,
                                    final String title,
                                    final String header,
                                    final String content) {
@@ -40,7 +39,6 @@ public final class Tools {
         message.setHeaderText(header);
         message.setContentText(content);
         message.show();
-        return message;
     }
 
     /**
@@ -48,12 +46,11 @@ public final class Tools {
      * [*Используется для предупреждения пользователя*]
      * @param header Краткое описание предупреждения
      * @param content Полное описание предупреждения
-     * @return Окно сообщения о предупреждении
      */
-    public static Alert showWarning(final String header,
+    public static void showWarning(final String header,
                                     final String content) {
 
-        return showMessage(
+         showMessage(
                 Alert.AlertType.WARNING,
                 "Предупреждение",
                 header,
@@ -64,11 +61,10 @@ public final class Tools {
      * Выводит окно исключения в коде.
      * @param header Краткое описание исключения
      * @param throwable Исключение
-     * @return Окно сообщения об ошибке
      */
-    public static Alert showError(final String header,
+    public static void showError(final String header,
                                   final Throwable throwable) {
-        return showMessage(Alert.AlertType.ERROR,
+         showMessage(Alert.AlertType.ERROR,
                     "Ошибка выполнения",
                     header,
                     getErrorInfoText(throwable));
