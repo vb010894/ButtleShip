@@ -1,0 +1,22 @@
+.header {
+    background-color: #009B95;
+    color: #006561;
+}
+
+.content {
+    background-color: snow;
+}
+
+.content-labels {
+    color: #FE3F44;
+    font-size: 16pt;
+    font-family: "Comic Sans MS";
+    font-weight: bold;
+}
+
+.content-text {
+    color: black;
+    font-size: 14pt;
+    font-family: "Comic Sans MS";
+    font-weight: bold;
+}

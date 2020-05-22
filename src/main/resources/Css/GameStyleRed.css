@@ -1,0 +1,45 @@
+.header {
+    -fx-background-color: #009B95;
+    -fx-text-fill: #006561;
+}
+
+.content {
+    -fx-background-color: snow;
+    -fx-font-family: "Comic Sans MS";
+    -fx-font-weight: bold;
+}
+
+.content-labels {
+    -fx-text-fill: #FE3F44;
+    -fx-font-size: 24pt;
+}
+
+.content-main-label {
+    -fx-text-fill: #FE3F44;
+    -fx-font-size: 36pt;
+}
+
+.content-text {
+    -fx-text-fill: black;
+    -fx-font-size: 14pt;
+}
+
+.content-group-layout {
+    -fx-border-width: 2px;
+    -fx-border-color: #33CDC7;
+    -fx-border-style: dotted;
+    -fx-border-radius: 10px;
+    -fx-text-fill: black;
+    -fx-font-size: 14pt;
+}
+
+.game-buttons {
+    -fx-background-color: snow;
+}
+
+.game-buttons:hover {
+    -fx-border-width: 2px;
+    -fx-border-style: solid;
+    -fx-border-color: #5CCCCC;
+    -fx-cursor: hand;
+}
