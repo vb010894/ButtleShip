@@ -1,17 +1,26 @@
 package ru.vdzinovev.Tools;
 
+import javafx.animation.Animation;
+import javafx.collections.ObservableList;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Group;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
+import javafx.scene.control.ButtonType;
+import javafx.scene.control.TextArea;
 import javafx.scene.layout.Pane;
 import ru.vdzinovev.Controllers.Scenes.StartWindowController;
+import ru.vdzinovev.Enums.MessageType;
 
 import java.io.IOException;
+import java.nio.file.attribute.GroupPrincipal;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
 
 /**
  * Класс инструментов для приложения.
@@ -103,27 +112,76 @@ public final class Tools {
     }
 
 
-    public static void showErrorMessage() {
-        String scenePath = "/FXML/ErrorMessageScene.fxml";
-        Parent errorMessage;
+    public static void showMessage(final MessageType type,
+                                        final String message) {
+        Group messageWindow;
         try {
-            errorMessage = FXMLLoader
+            switch (type) {
+
+                default: messageWindow = showMessage(
+                        type.value(),
+                        message);
+            }
+
+            GameAnimations.showFrame(messageWindow);
+        } catch (Exception ex) {
+            showCrashMessage(ex);
+        }
+
+    }
+
+    private static Group showMessage(final String scenePath,
+                                    final String message)
+    throws Exception {
+        Parent errorMessage = FXMLLoader
                     .load(
                             Tools.class
                                     .getResource(
                                             scenePath));
             Group group = new Group(errorMessage);
             Pane content = StartWindowController
-                           .getTargetContent();
+                    .getTargetContent();
             group.setLayoutX(content.getPrefWidth() / 2 - 200);
             group.setLayoutY(content.getPrefHeight() / 2 - 100);
-            List<Node> children = content.getChildren();
-            children.add(group);
-            GameAnimations.showFrame(group);
-        } catch (IOException e) {
-            e.printStackTrace();
+            content.getChildren().add(group);
+
+            ObservableList<Node> children = errorMessage
+                                            .getChildrenUnmodifiable();
+
+
+            Optional<Node> messageField =
+                                        children
+                                        .stream()
+                                        .filter(node -> node
+                                                        instanceof TextArea)
+                                        .findAny();
+
+        if (messageField.isPresent()) {
+
+            TextArea area = (TextArea)  messageField.stream().collect(Collectors.toList()).get(0);
+            area.setText(message);
+        } else {
+            throw new RuntimeException("Не найдено поле вывода ошибки");
         }
 
+        TextArea area = (TextArea) children.get(2);
+        area.setText(message);
+
+        return group;
+    }
+
+    private static void showCrashMessage(Throwable throwable) {
+        Alert alert = new Alert(Alert.AlertType.ERROR);
+        alert.setTitle("Ошибка");
+        alert.setHeaderText("Ошибка основного фрейма вывода");
+        alert.setContentText("Сообщение:\r\n"
+                            + throwable.getMessage());
+        alert.getButtonTypes().clear();
+        ButtonType okButton = new ButtonType("OK");
+        alert.getButtonTypes().add(okButton);
+        Optional<ButtonType> buttonType = alert.showAndWait();
+        if (buttonType.get() == okButton) System.exit(-1);
+        alert.setOnCloseRequest(handler -> System.exit(-1));
     }
 
 }

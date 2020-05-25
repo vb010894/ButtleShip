@@ -1,22 +1,55 @@
 package ru.vdzinovev.Controllers.Messages;
 
-import javafx.animation.Timeline;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
-import javafx.scene.control.TextArea;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 
-public class ErrorMessageController extends MessageControllerBase {
+import java.io.InputStream;
+
+/**
+ * Класс вывода ошибки.
+ * @author Vboy
+ * @version 1.0
+ * @since 1.0
+ */
+public class ErrorMessageController
+extends MessageControllerBase {
 
 
+    /**
+     * Кнопка "ОК".
+     */
     @FXML
     private Button okButton;
 
+    /**
+     * Иконка.
+     */
     @FXML
-    private TextArea contentField;
+    private ImageView messageIcon;
 
+    /**
+     * Метод инициализации.
+     */
     @FXML
     public void initialize() {
          this.setButtonAnimation(okButton);
-         System.out.println(okButton.getOnMouseEntered());
+         this.setMessageIcon();
+         this.okButton.setOnMouseClicked(handler -> System.exit(-1));
+
     }
+
+    /**
+     * Добавляет иконку к сообщению.
+     */
+    @Override
+    void setMessageIcon() {
+        InputStream inputStream = this.getClass().getResourceAsStream(
+                "/Images/closeIcon.png");
+        Image img = new Image(inputStream);
+        messageIcon.setImage(img);
+    }
+
+
 }

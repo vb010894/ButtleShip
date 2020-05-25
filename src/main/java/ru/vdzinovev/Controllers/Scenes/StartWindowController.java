@@ -10,6 +10,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
 import javafx.scene.layout.Pane;
 import lombok.Getter;
+import ru.vdzinovev.Enums.MessageType;
 import ru.vdzinovev.Tools.Tools;
 
 import java.awt.*;
@@ -99,7 +100,7 @@ public class StartWindowController {
      * Показывает настройки игры.
      */
     private void showSettings() throws IOException {
-        Tools.showErrorMessage();
+        Tools.showMessage(MessageType.Error, "Тестовая ошибка");
         /*String scenePath = "/FXML/SettingScene.fxml";
         Parent settingScene  = FXMLLoader
                                .load(

@@ -7,7 +7,7 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.Pane?>
 
-<AnchorPane prefHeight="200.0" prefWidth="400.0" styleClass="error-body" stylesheets="@../Css/DefualtStyle/ErrorMessageStyle.css" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ru.vdzinovev.Controllers.Messages.ErrorMessageController">
+<AnchorPane prefHeight="200.0" prefWidth="400.0" styleClass="error-body" stylesheets="@../Css/DefualtStyle/ErrorMessageStyle.css" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ru.vdzinovev.Controllers.Messages.ConfirmMessageController">
    <children>
       <Pane layoutX="6.0" layoutY="7.0" prefHeight="58.0" prefWidth="388.0" styleClass="error-header">
          <children>

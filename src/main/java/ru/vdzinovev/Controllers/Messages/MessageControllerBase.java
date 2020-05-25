@@ -4,14 +4,17 @@ import javafx.animation.Transition;
 import javafx.scene.control.Button;
 import ru.vdzinovev.Tools.GameAnimations;
 
-public class MessageControllerBase {
+import javax.swing.text.html.ImageView;
+import java.io.InputStream;
+
+public abstract class MessageControllerBase {
 
 
     /**
      * Анимация кнопки.
      * @param button
      */
-    public void setButtonAnimation(Button button) {
+    protected void setButtonAnimation(Button button) {
         double buttonWidth = button.getMaxWidth();
         double buttonHeight = button.getMaxWidth();
 
@@ -25,4 +28,5 @@ public class MessageControllerBase {
         });
     }
 
+    abstract void setMessageIcon();
 }
