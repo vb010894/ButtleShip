@@ -1,4 +1,4 @@
-package ru.vdzinovev.Controllers;
+package ru.vdzinovev.Controllers.Scenes;
 
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -82,7 +82,16 @@ public class StartWindowController {
      */
     private void playSingleMod()
             throws IOException {
-
+        String scenePath = "/FXML/FieldsView.fxml";
+        Parent settingScene  = FXMLLoader
+                .load(
+                        getClass()
+                                .getResource(
+                                        scenePath));
+        Group group = new Group(settingScene);
+        List<Node> children = content.getChildren();
+        children.forEach(child -> child.setVisible(false));
+        children.add(group);
     }
 
 
@@ -90,7 +99,8 @@ public class StartWindowController {
      * Показывает настройки игры.
      */
     private void showSettings() throws IOException {
-        String scenePath = "/FXML/SettingScene.fxml";
+        Tools.showErrorMessage();
+        /*String scenePath = "/FXML/SettingScene.fxml";
         Parent settingScene  = FXMLLoader
                                .load(
                                      getClass()
@@ -99,7 +109,7 @@ public class StartWindowController {
         Group group = new Group(settingScene);
         List<Node> children = content.getChildren();
         children.forEach(child -> child.setVisible(false));
-        children.add(group);
+        children.add(group);*/
     }
 
     /**

@@ -1,20 +1,20 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.Pane?>
 
-<AnchorPane prefHeight="488.0" prefWidth="1200.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ru.vdzinovev.Controllers.StartWindowController">
+<AnchorPane prefHeight="488.0" prefWidth="1200.0" styleClass="content-text" stylesheets="@../Css/GameStyleRed.css" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ru.vdzinovev.Controllers.Scenes.GameSceneController">
    <children>
-      <Pane prefHeight="488.0" prefWidth="600.0">
+      <Pane fx:id="gameWindow" prefHeight="102.0" prefWidth="1200.0" styleClass="header">
          <children>
-            <TableView fx:id="shootingField" layoutX="-4.0" layoutY="-1.0" prefHeight="488.0" prefWidth="593.0" />
+            <Label layoutX="34.0" layoutY="43.0" text="Время" />
+            <TextField id="timeField" fx:id="gameTime" editable="false" layoutX="102.0" layoutY="38.0" prefHeight="41.0" prefWidth="109.0" />
+            <Label layoutX="785.0" layoutY="43.0" text="Бомбы" />
+            <TextField id="bombField" fx:id="bombCount" editable="false" layoutX="890.0" layoutY="33.0" prefHeight="41.0" prefWidth="82.0" />
          </children>
       </Pane>
-      <Pane layoutX="601.0" prefHeight="488.0" prefWidth="593.0">
-         <children>
-            <TableView fx:id="shipsField" layoutX="-6.0" prefHeight="488.0" prefWidth="600.0" />
-         </children>
-      </Pane>
+      <Pane fx:id="gameField" layoutY="102.0" prefHeight="386.0" prefWidth="1200.0" />
    </children>
 </AnchorPane>

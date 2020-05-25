@@ -9,15 +9,12 @@ import javafx.scene.layout.Background;
 import javafx.scene.layout.BackgroundFill;
 import javafx.scene.layout.CornerRadii;
 import javafx.scene.paint.Paint;
-import ru.vdzinovev.Controllers.StartWindowController;
 import ru.vdzinovev.Enums.GameMode;
 import ru.vdzinovev.Tools.Constants;
 import ru.vdzinovev.Tools.Tools;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.Properties;
-import java.util.stream.Collector;
 import java.util.stream.Collectors;
 
 public class SettingSceneController {
