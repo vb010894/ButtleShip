@@ -100,7 +100,7 @@ public class StartWindowController {
      * Показывает настройки игры.
      */
     private void showSettings() throws IOException {
-        Tools.showMessage(MessageType.Error, "Тестовая ошибка");
+        Tools.showMessage(MessageType.Warning, "Произошла ошибка");
         /*String scenePath = "/FXML/SettingScene.fxml";
         Parent settingScene  = FXMLLoader
                                .load(

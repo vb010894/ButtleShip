@@ -11,7 +11,7 @@
    <children>
       <Pane layoutX="6.0" layoutY="7.0" prefHeight="58.0" prefWidth="388.0" styleClass="error-header">
          <children>
-            <Label layoutX="16.0" layoutY="15.0" styleClass="error-text" text="Ошибка" />
+            <Label layoutX="16.0" layoutY="15.0" styleClass="error-text" text="Предупреждение" />
             <ImageView fx:id="messageIcon" fitHeight="35.0" fitWidth="50.0" layoutX="333.0" layoutY="9.0" pickOnBounds="true" preserveRatio="true" />
          </children>
       </Pane>

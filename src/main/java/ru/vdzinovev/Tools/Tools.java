@@ -121,6 +121,12 @@ public final class Tools {
                 default: messageWindow = showMessage(
                         type.value(),
                         message);
+                break;
+                case Warning:
+                    messageWindow = showMessage(
+                            type.value(),
+                            message);
+                break;
             }
 
             GameAnimations.showFrame(messageWindow);

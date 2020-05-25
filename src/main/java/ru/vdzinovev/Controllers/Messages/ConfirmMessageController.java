@@ -1,5 +1,15 @@
 package ru.vdzinovev.Controllers.Messages;
 
-public class ConfirmMessageController {
+import javafx.scene.image.Image;
 
+import java.io.InputStream;
+
+
+public class ConfirmMessageController extends MessageControllerBase {
+
+
+    @Override
+    void setMessageIcon() {
+
+    }
 }
