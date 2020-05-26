@@ -4,7 +4,9 @@ package ru.vdzinovev.Controllers.Scenes;
 import javafx.animation.KeyFrame;
 import javafx.animation.KeyValue;
 import javafx.animation.Timeline;
+import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
+import javafx.scene.Group;
 import javafx.scene.Node;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
@@ -16,11 +18,14 @@ import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
 import javafx.util.Duration;
+import ru.vdzinovev.Enums.MessageType;
 import ru.vdzinovev.Tools.Constants;
+import ru.vdzinovev.Tools.GameAnimations;
 import ru.vdzinovev.Tools.Tools;
 
 import java.io.InputStream;
 import java.util.*;
+import java.util.stream.Collector;
 import java.util.stream.Collectors;
 
 public class GameSceneController {
@@ -37,6 +42,12 @@ public class GameSceneController {
     @FXML
     private Pane gameField;
 
+    @FXML
+    private ImageView repeatButton;
+
+    @FXML
+    private ImageView backButton;
+
     List<int[]> bombs = new LinkedList<>();
 
     int totalCell;
@@ -52,20 +63,37 @@ public class GameSceneController {
      */
     @FXML
     public void initialize() {
+
         this.printField();
         this.generateBomb();
         this.startTimer();
         this.setBombCount(Constants.getBombCount());
+        this.repeatButton.setOnMouseClicked(handler -> this.userRestart());
+        this.backButton.setOnMouseClicked(handler -> backToStart());
+    }
+
+    private void userRestart() {
+        final String message =
+                                "Вы уверены что хотите перезапустить игру?";
+        Tools.showMessage(MessageType.Message, message, "restartGame",
+                "backToStart", this);
+    }
+
+    private void backToStart() {
+        GameAnimations.switchScene(null, true);
     }
 
     /**
      * Запускает таймер.
      */
     private void startTimer() {
-        timer = new Thread(() -> changeTimer());
+        timer = new Thread(this::changeTimer);
         timer.start();
     }
 
+    /**
+     * Процедура выполнения потока.
+     */
     private void changeTimer() {
         try {
             while (true) {
@@ -151,8 +179,7 @@ public class GameSceneController {
                 cell.setLayoutY(y);
                 cell.setPrefHeight(height);
                 cell.setStyle(
-                                "-fx-background-color: #006363;"
-                                + "-fx-border-width: 2px;"
+                                "-fx-border-width: 2px;"
                                 + "-fx-border-style: solid");
                 cell.setId(j + "," + i);
                 cell.setOnMouseClicked(event -> this.cellClicked(cell, event));
@@ -169,12 +196,11 @@ public class GameSceneController {
      * @param button Кнопка
      */
     private void cellClicked(Button button, MouseEvent event) {
-        if(event.getButton() == MouseButton.PRIMARY)
+        if (event.getButton() == MouseButton.PRIMARY)
             this.mouseLeftClick(button);
-        else if (event.getButton() == MouseButton.SECONDARY)
-            this.mouseRightClick(button);
-        else return;
 
+        if (event.getButton() == MouseButton.SECONDARY)
+            this.mouseRightClick(button);
     }
 
     private void mouseRightClick(Button button) {
@@ -223,7 +249,7 @@ public class GameSceneController {
             long closedCell =
                     this.gameField.getChildren().stream().filter(node -> {
                         Button btn = (Button) node;
-                        return btn.getText().length() == 0;
+                        return btn.getText().length() == 0 | btn.getText().equals("B");
                     }).count();
 
             if(closedCell == Constants.getBombCount()) {
@@ -261,32 +287,14 @@ public class GameSceneController {
 
         this.blowButton(fields, view);
 
-        this.tryAgainMessage();
-    }
-
-    /**
-     * Сообщение, когда взорвалась бомба.
-     */
-    private void tryAgainMessage() {
-        timer.interrupt();
-        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
-        alert.setTitle("Вы попались на бомбу");
-        alert.setHeaderText("Желаете повторить?");
-        alert.setContentText("При нажатии кнопки 'ДА' игра начнется заново, "
-                + "если 'Нет' игра вернется на главное меню");
-
-        ButtonType yes = new ButtonType("Да");
-        ButtonType no = new ButtonType("Нет");
-        alert.getButtonTypes().clear();
-        alert.getButtonTypes().add(yes);
-        alert.getButtonTypes().add(no);
-        Optional<ButtonType> input = alert.showAndWait();
-
-        if (input.get() == yes) {
-            this.restartGame();
-        } else {
-            this.closeApp();
-        }
+        final String message = "Вы попали на бомбу.\r\n Игра проиграна. "
+                + "Желаете "
+                + "повторить?";
+        Tools.showMessage(MessageType.Message,
+                message,
+                "restartGame",
+                "backToStart",
+                this);
     }
 
     /**
@@ -309,10 +317,24 @@ public class GameSceneController {
      * Перезапускает игру.
      */
     private void restartGame() {
+        List<Node> groups = StartWindowController
+                .getTargetContent()
+                .getChildren()
+                .stream()
+                .filter(node -> node instanceof Group)
+                .collect(Collectors.toList());
+        groups.forEach(node -> {
+            if(node.toString().contains("messageScene")) {
+                StartWindowController
+                        .getTargetContent()
+                        .getChildren().remove(node);
+            }
+        });
         minutes = 0;
         second = 0;
         this.gameField.getChildren().clear();
         this.initialize();
+
     }
 
     /**
@@ -327,8 +349,6 @@ public class GameSceneController {
         timeline.setCycleCount(1);
         timeline.setOnFinished(handler -> this.markStep(view));
         timeline.setDelay(Duration.seconds(0.5));
-
-
 
         fields.forEach(elem -> {
             elem.toFront();
@@ -429,12 +449,15 @@ public class GameSceneController {
     private void gameWin() {
         this.timer.interrupt();
         this.gameField.getChildren().forEach(node -> node.setDisable(true));
-        Tools.showWarning("Игра Выиграна!",
-                "Вы выиграли игру."
-                        + " Общее время: "
-                        + minutes
-                        + ":"
-                        + second);
+        final String message =
+                                        "Вы выиграли игру."
+                                        + "\r\n"
+                                        + " Общее время: "
+                                        + minutes
+                                        + ":"
+                                        + second;
+            Tools.showMessage(MessageType.Message, message, "restartGame",
+                    "backToStart", this);
     }
 
     /**

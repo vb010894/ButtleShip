@@ -5,19 +5,19 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Group;
 import javafx.scene.Node;
 import javafx.scene.Parent;
-import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
-import javafx.scene.control.ButtonType;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.Pane;
 import lombok.Getter;
 import ru.vdzinovev.Enums.MessageType;
+import ru.vdzinovev.Tools.GameAnimations;
 import ru.vdzinovev.Tools.Tools;
 
-import java.awt.*;
 import java.io.IOException;
-import java.security.PublicKey;
+import java.io.InputStream;
 import java.util.List;
-import java.util.Optional;
+import java.util.stream.Collectors;
 
 public class StartWindowController {
 
@@ -53,20 +53,29 @@ public class StartWindowController {
     private Button appClose;
 
     /**
+     * Логотип.
+     */
+    @FXML
+    private ImageView logoView;
+
+    /**
      * Инициализация окна.
      */
     @FXML
     public void initialize() {
+        InputStream inputStream =
+                this
+                .getClass()
+                .getResourceAsStream("/Images/bomb.png");
+        Image img = new Image(inputStream);
+        this.logoView.setImage(img);
         targetContent = this.content;
         appClose.setOnAction(event -> this.closeApp());
         singlePlayer.setOnMouseClicked(event -> {
             try {
                 this.playSingleMod();
             } catch (IOException io) {
-                Tools.showError(
-                        "Ошибка отрисовки сцены битвы",
-                                io);
-
+                Tools.showError("Ошибка Сцены игры", io);
             }
         });
         settings.setOnMouseClicked(event -> {
@@ -90,9 +99,7 @@ public class StartWindowController {
                                 .getResource(
                                         scenePath));
         Group group = new Group(settingScene);
-        List<Node> children = content.getChildren();
-        children.forEach(child -> child.setVisible(false));
-        children.add(group);
+        GameAnimations.switchScene(group, false);
     }
 
 
@@ -100,17 +107,43 @@ public class StartWindowController {
      * Показывает настройки игры.
      */
     private void showSettings() throws IOException {
-        Tools.showMessage(MessageType.Warning, "Произошла ошибка");
-        /*String scenePath = "/FXML/SettingScene.fxml";
+
+        String scenePath = "/FXML/SettingScene.fxml";
         Parent settingScene  = FXMLLoader
                                .load(
                                      getClass()
-                                     .getResource(
-                                             scenePath));
+                                     .getResource(scenePath));
         Group group = new Group(settingScene);
-        List<Node> children = content.getChildren();
-        children.forEach(child -> child.setVisible(false));
-        children.add(group);*/
+        GameAnimations.switchScene(group, false);
+    }
+
+    /**
+     * Закрытие приложение
+     * по кнопке "Да".
+     */
+    private void closeAppYesButtonEvent() {
+        System.exit(0);
+    }
+
+    /**
+     * Закрытие окна сообщения
+     * по кнопке "Нет".
+     */
+    private void closeAppNoButtonEvent() {
+        List<Node> message =
+                    this
+                    .content
+                    .getChildren()
+                    .stream()
+                    .filter(node -> node instanceof Group)
+                    .collect(Collectors.toList());
+
+        if (message.size() > 0) {
+            message.forEach(node -> this
+                                        .content
+                                        .getChildren()
+                                        .remove(node));
+        }
     }
 
     /**
@@ -121,13 +154,10 @@ public class StartWindowController {
      * иначе закрывает сообщение
      */
     private void closeApp() {
-        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
-        alert.setTitle("Выход");
-        alert.setHeaderText("Вы дейстивительно хотите выйти?");
-        Optional<ButtonType> result = alert.showAndWait();
-        if(result.isPresent()
-                &&
-           result.get() == ButtonType.OK) System.exit(0);
-        else  alert.close();
+        Tools.showMessage(MessageType.Message,
+                "Вы дейстивительно хотите выйти?",
+                "closeAppYesButtonEvent",
+                "closeAppNoButtonEvent",
+                this);
     }
 }

@@ -11,7 +11,8 @@ public enum  MessageType {
      * Ошибка.
      */
     Error("/FXML/ErrorMessageScene.fxml"),
-    Warning("/FXML/WarningMessageScene.fxml");
+    Warning("/FXML/WarningMessageScene.fxml"),
+    Message("/FXML/ConfirmMessageScene.fxml");
 
     /**
      * Текущее состояние.

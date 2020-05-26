@@ -11,11 +11,12 @@
    <children>
       <Pane layoutX="6.0" layoutY="7.0" prefHeight="58.0" prefWidth="388.0" styleClass="error-header">
          <children>
-            <Label layoutX="16.0" layoutY="15.0" styleClass="error-text" text="Ошибка" />
+            <Label layoutX="16.0" layoutY="15.0" styleClass="error-text" text="Внимание" />
             <ImageView fx:id="messageIcon" fitHeight="35.0" fitWidth="50.0" layoutX="333.0" layoutY="9.0" pickOnBounds="true" preserveRatio="true" />
          </children>
       </Pane>
-      <Button fx:id="okButton" layoutX="315.0" layoutY="151.0" maxHeight="35.0" maxWidth="64.0" minHeight="35.0" minWidth="64.0" mnemonicParsing="false" prefHeight="35.0" prefWidth="64.0" styleClass="error-button" text="Ок" />
+      <Button fx:id="noButton" layoutX="315.0" layoutY="151.0" maxHeight="35.0" maxWidth="64.0" minHeight="35.0" minWidth="64.0" mnemonicParsing="false" prefHeight="35.0" prefWidth="64.0" styleClass="error-button" text="Нет" />
       <TextArea fx:id="contentField" editable="false" focusTraversable="false" layoutX="10.0" layoutY="73.0" prefHeight="74.0" prefWidth="379.0" text="Тест" />
+      <Button fx:id="yesButton" layoutX="243.0" layoutY="151.0" maxHeight="35.0" maxWidth="64.0" minHeight="35.0" minWidth="64.0" mnemonicParsing="false" prefHeight="35.0" prefWidth="64.0" styleClass="error-button" text="Да" />
    </children>
 </AnchorPane>

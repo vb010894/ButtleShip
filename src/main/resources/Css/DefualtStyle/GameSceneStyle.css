@@ -1,0 +1,41 @@
+.scene-body {
+    -fx-border-width: 2px;
+    -fx-border-color: rgb(45, 45, 50);
+    -fx-border-style: solid;
+    -fx-background-color: rgb(60, 60, 65);
+    -fx-font-family: "Comic Sans MS";
+    -fx-font-size: 14;
+    -fx-font-weight: bold;
+    -fx-background-insets: 0, 0 1 1 0;
+}
+
+.button {
+    -fx-border-color: black;
+    -fx-background-color: rgb(60, 60, 65);
+    -fx-text-fill: yellow;
+}
+
+.scene-body > .scene-label {
+    -fx-text-fill: yellow;
+    -fx-font-size: 54;
+    -fx-font-weight: bold;
+}
+
+.scene-body > .check-box {
+    -fx-text-fill: yellow;
+    -fx-font-size: 20;
+    -fx-font-weight: bold;
+}
+
+.scene-body > .label {
+    -fx-text-fill: yellow;
+    -fx-font-size: 20;
+    -fx-font-weight: bold;
+}
+
+.scene-body > .radio-button {
+    -fx-text-fill: yellow;
+    -fx-font-size: 20;
+    -fx-font-weight: bold;
+}
+

@@ -39,7 +39,7 @@ public class WarningMessageController extends MessageControllerBase {
     @Override
     void setMessageIcon() {
         InputStream inputStream = this.getClass().getResourceAsStream(
-                "/Images/Smiless.png");
+                "/Images/warning.png");
         Image img = new Image(inputStream);
         messageIcon.setImage(img);
     }
