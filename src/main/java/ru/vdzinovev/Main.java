@@ -83,9 +83,12 @@ public class Main extends Application {
                                                             + "/StartWindow"
                                                             + ".fxml"));
 
-            ResourceBundle lang = ResourceBundle.getBundle("Texts"
-                    + ".ru-Ru");
-            Constants.setLanguageBundle(lang);
+            gameProps = new Properties();
+            stream =  Main.class.getResourceAsStream(
+                    "/Texts"
+                            + "/ru-RU.properties");
+            gameProps.load(stream);
+            Constants.setLanguageBundle(gameProps);
             sRoot.setOnMousePressed(this::sGetDragCoordinateOffset);
             sRoot.setOnMouseDragged(event -> sDragWindow(event, primaryStage));
             primaryStage.initStyle(StageStyle.UNDECORATED);
@@ -98,8 +101,6 @@ public class Main extends Application {
             e.printStackTrace();
             System.exit(0);
         }
-
-
     }
 
     /**

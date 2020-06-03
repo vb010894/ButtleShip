@@ -1,20 +1,32 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.Pane?>
 
-<AnchorPane prefHeight="488.0" prefWidth="1200.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ru.vdzinovev.Controllers.StartWindowController">
+<AnchorPane prefHeight="488.0" prefWidth="1200.0" styleClass="content-text" stylesheets="@../Css/GameStyleRed.css" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ru.vdzinovev.Controllers.Scenes.GameSceneController">
    <children>
-      <Pane prefHeight="488.0" prefWidth="600.0">
+      <Pane fx:id="gameWindow" prefHeight="102.0" prefWidth="1200.0" styleClass="scene-body" stylesheets="@../Css/DefualtStyle/GameSceneStyle.css">
          <children>
-            <TableView fx:id="shootingField" layoutX="-4.0" layoutY="-1.0" prefHeight="488.0" prefWidth="593.0" />
+            <Label layoutX="34.0" layoutY="43.0" text="Время" />
+            <TextField id="timeField" fx:id="gameTime" editable="false" layoutX="102.0" layoutY="38.0" prefHeight="41.0" prefWidth="109.0" />
+            <Label layoutX="233.0" layoutY="45.0" text="Бомбы" />
+            <TextField id="bombField" fx:id="bombCount" editable="false" layoutX="308.0" layoutY="39.0" prefHeight="41.0" prefWidth="82.0" />
+            <ImageView fx:id="repeatButton" fitHeight="41.0" fitWidth="50.0" layoutX="1128.0" layoutY="31.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../Images/repeat.png" />
+               </image>
+            </ImageView>
+            <ImageView fx:id="backButton" fitHeight="60.0" fitWidth="41.0" layoutX="1058.0" layoutY="29.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../Images/back.png" />
+               </image>
+            </ImageView>
          </children>
       </Pane>
-      <Pane layoutX="601.0" prefHeight="488.0" prefWidth="593.0">
-         <children>
-            <TableView fx:id="shipsField" layoutX="-6.0" prefHeight="488.0" prefWidth="600.0" />
-         </children>
-      </Pane>
+      <Pane fx:id="gameField" layoutY="102.0" prefHeight="386.0" prefWidth="1200.0" styleClass="scene-body" stylesheets="@../Css/DefualtStyle/GameSceneStyle.css" />
    </children>
 </AnchorPane>

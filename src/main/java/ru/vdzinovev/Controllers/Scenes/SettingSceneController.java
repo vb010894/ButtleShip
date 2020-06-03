@@ -2,45 +2,67 @@ package ru.vdzinovev.Controllers.Scenes;
 
 import javafx.fxml.FXML;
 import javafx.geometry.Insets;
-import javafx.scene.Node;
 import javafx.scene.control.*;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.BackgroundFill;
 import javafx.scene.layout.CornerRadii;
 import javafx.scene.paint.Paint;
-import ru.vdzinovev.Controllers.StartWindowController;
 import ru.vdzinovev.Enums.GameMode;
 import ru.vdzinovev.Tools.Constants;
+import ru.vdzinovev.Tools.GameAnimations;
 import ru.vdzinovev.Tools.Tools;
 
-import java.util.List;
-import java.util.Optional;
 import java.util.Properties;
-import java.util.stream.Collector;
-import java.util.stream.Collectors;
 
+/**
+ * Контроллер сцены настройки.
+ * @author Vboy
+ * @version 1.0
+ * @since 1.0
+ */
 public class SettingSceneController {
 
 
+    /**
+     * Переключатели.
+     */
     @FXML
     private ToggleGroup GameModeGroup;
 
+    /**
+     * Пользовательские настройки.
+     */
     @FXML
     private CheckBox userSettingCheckBox;
 
+    /**
+     * Количество бомб.
+     */
     @FXML
     private TextField bombCount;
 
+    /**
+     * Высота.
+     */
     @FXML
     private TextField heightCount;
 
+    /**
+     * Ширина.
+     */
     @FXML
     private TextField widthCount;
 
+    /**
+     * Кнопка "Созранить".
+     */
     @FXML
     private Button saveButton;
 
+    /**
+     * Кнопка "Возврат".
+     */
     @FXML
     private Button backButton;
 
@@ -58,24 +80,44 @@ public class SettingSceneController {
 
     }
 
-    private void inputStart(TextField field) {
-        field.setBackground(new Background(new BackgroundFill(Paint.valueOf("white"),
-                                                    CornerRadii.EMPTY,
-                                                    Insets.EMPTY)));
+    /**
+     * Сброс цвета в полях.
+     * @param field Поле
+     */
+    private void inputStart(final TextField field) {
+        field.setBackground(
+                new Background(
+                        new BackgroundFill(Paint.valueOf("white"),
+                                           CornerRadii.EMPTY,
+                                           Insets.EMPTY)));
     }
 
-
-    private void switchUserSettings(MouseEvent mouseEvent) {
-            this.GameModeGroup.getToggles().forEach(this::switchStateToggle);
+    /**
+     * Меняет настройки.
+     * @param mouseEvent Действие
+     */
+    private void switchUserSettings(final MouseEvent mouseEvent) {
+            this
+                    .GameModeGroup
+                    .getToggles()
+                    .forEach(this::switchStateToggle);
             this.switchUserInput();
     }
 
-    private void switchStateToggle(Toggle toggle) {
+    /**
+     * Меняет состояние переключателей.
+     * @param toggle Переключатели
+     */
+    private void switchStateToggle(final Toggle toggle) {
         RadioButton radio = (RadioButton) toggle;
         boolean state = !radio.isDisable();
         radio.setDisable(state);
     }
 
+    /**
+     * Изменение состояний полей
+     * для пользовательского ввода.
+     */
     private void switchUserInput() {
         boolean state = !this.bombCount.isEditable();
         this.bombCount.setEditable(state);
@@ -83,45 +125,49 @@ public class SettingSceneController {
         this.widthCount.setEditable(state);
     }
 
-    private void backToScene(MouseEvent mouseEvent) {
-       List<Node> thisScene = StartWindowController
-                                                    .getTargetContent()
-                                                    .getChildren()
-                                                    .stream()
-                                                    .filter(child -> child.isVisible())
-                                                    .collect(Collectors.toList());
-
-       List<Node> startScene = StartWindowController
-                                                   .getTargetContent()
-                                                   .getChildren()
-                                                   .stream()
-                                                   .filter(child -> !child.isVisible())
-                                                   .collect(Collectors.toList());
-        thisScene.forEach(found -> found.setVisible(false));
-        startScene.forEach(found -> found.setVisible(true));
+    /**
+     * Вернуться к стартовому окну.
+     * @param mouseEvent Событие
+     */
+    private void backToScene(final MouseEvent mouseEvent) {
+        System.out.println(Constants.getFieldsHeight());
+        System.out.println(Constants.getFieldsWidth());
+        System.out.println(Constants.getBombCount());
+        GameAnimations.switchScene(
+                        null,
+                        true);
     }
 
-    private void setGameConfig(MouseEvent mouseEvent) {
-
-        if (userSettingCheckBox.isSelected()) {
+    /**
+     * Сохраняет настройки.
+     * @param mouseEvent Событие
+     */
+    private void setGameConfig(final MouseEvent mouseEvent) {
+        if (this.userSettingCheckBox.isSelected()) {
             this.configureByUserMode();
-            return;
-        }
-
-        RadioButton tg = (RadioButton) this.GameModeGroup.getSelectedToggle();
-        switch (tg.getId()) {
-            default                 : this.configureByToggleMode(
-                                                                GameMode.EASY,
-                                                                "Easy");
-            case "mediumModeRadio"  : this.configureByToggleMode(
-                                                                GameMode.MEDIUM,
-                                                                "Medium");
-            case "hardModeRadio"    : this.configureByToggleMode(
-                                                                GameMode.HARD,
-                                                                "Hard");
+        } else {
+            RadioButton tg = (RadioButton) this.GameModeGroup.getSelectedToggle();
+            switch (tg.getId()) {
+                default:
+                    this.configureByToggleMode(
+                            GameMode.EASY,
+                            "Easy");
+                case "mediumModeRadio":
+                    this.configureByToggleMode(
+                            GameMode.MEDIUM,
+                            "Medium");
+                case "hardModeRadio":
+                    this.configureByToggleMode(
+                            GameMode.HARD,
+                            "Hard");
+            }
         }
     }
 
+    /**
+     * Изменение настроек
+     * пользовательским способом.
+     */
     private void configureByUserMode() {
 
         Constants.setGameMode(GameMode.USER);
@@ -146,14 +192,14 @@ public class SettingSceneController {
             Tools.showWarning(
                     Constants
                             .getLanguageBundle()
-                            .getString("Warning.Numeric.Field.Input.Header"),
+                            .getProperty("Warning.Numeric.Field.Input.Header"),
                     Constants
                             .getLanguageBundle()
-                            .getString("Warning.Numeric.Field.Input.Content"));
+                            .getProperty("Warning.Numeric.Field.Input.Content"));
             return;
         }
 
-        if(this.checkUserInput(width, height, bombCount)) {
+        if(!this.checkUserInput(width, height, bombCount)) {
             return;
         }
 
@@ -162,6 +208,13 @@ public class SettingSceneController {
         Constants.setBombCount(bombCount);
     }
 
+    /**
+     * Проверяет пользовательский ввод.
+     * @param width Поле ширина сетки
+     * @param height Поле высота сетки
+     * @param bombCount Количество бомб
+     * @return Результат проверки
+     */
     private boolean checkUserInput(final int width,
                                    final int height,
                                    final int bombCount) {
@@ -169,10 +222,10 @@ public class SettingSceneController {
         if (bombCount > (height * width)) {
             Tools.showWarning(Constants
                             .getLanguageBundle()
-                            .getString("Warning.Bomb.Count.Header"),
+                            .getProperty("Warning.Bomb.Count.Header"),
                     Constants
                             .getLanguageBundle()
-                            .getString("Warning.Bomb.Count.Content"));
+                            .getProperty("Warning.Bomb.Count.Content"));
 
             this.bombCount.setBackground(new Background(new BackgroundFill(Paint.valueOf("red"),
                     CornerRadii.EMPTY,
@@ -193,10 +246,10 @@ public class SettingSceneController {
         if (width > maxWidth) {
             Tools.showWarning(Constants
                             .getLanguageBundle()
-                            .getString("Warning.Max.Height.Header"),
+                            .getProperty("Warning.Max.Height.Header"),
                     Constants
                             .getLanguageBundle()
-                            .getString("Warning.Max.Height.Content"));
+                            .getProperty("Warning.Max.Height.Content"));
 
             this.bombCount.setBackground(new Background(new BackgroundFill(Paint.valueOf("red"),
                     CornerRadii.EMPTY,
@@ -207,10 +260,10 @@ public class SettingSceneController {
         if (height > maxHeight) {
             Tools.showWarning(Constants
                             .getLanguageBundle()
-                            .getString("Warning.Max.Width.Header"),
+                            .getProperty("Warning.Max.Width.Header"),
                     Constants
                             .getLanguageBundle()
-                            .getString("Warning.Max.Width.Content"));
+                            .getProperty("Warning.Max.Width.Content"));
 
             this.bombCount.setBackground(new Background(new BackgroundFill(Paint.valueOf("red"),
                     CornerRadii.EMPTY,
@@ -221,6 +274,11 @@ public class SettingSceneController {
         return true;
     }
 
+    /**
+     * Настройки с помощью переключателей.
+     * @param mode Текущее значение
+     * @param modePrefix Префикс переменной
+     */
     private void configureByToggleMode(
                                       final GameMode mode,
                                       final String modePrefix) {

@@ -13,14 +13,14 @@
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane prefHeight="488.0" prefWidth="1200.0" styleClass="content" stylesheets="@../Css/GameStyleRed.css" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ru.vdzinovev.Controllers.Scenes.SettingSceneController">
+<AnchorPane prefHeight="488.0" prefWidth="1200.0" styleClass="scene-body" stylesheets="@../Css/DefualtStyle/SettingSceneStyle.css" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ru.vdzinovev.Controllers.Scenes.SettingSceneController">
    <children>
-      <Label layoutX="464.0" layoutY="36.0" prefHeight="67.0" prefWidth="335.0" styleClass="content-main-label" stylesheets="@../Css/GameStyleRed.css" text="Настройки" textAlignment="CENTER">
+      <Label layoutX="464.0" layoutY="36.0" prefHeight="67.0" prefWidth="335.0" style="-fx-font-size: 56;" styleClass="scene-label" text="Настройки" textAlignment="CENTER">
          <font>
             <Font name="Comic Sans MS" size="29.0" />
          </font>
       </Label>
-      <Pane layoutX="14.0" layoutY="135.0" prefHeight="341.0" prefWidth="498.0" styleClass="content-group-layout">
+      <Pane layoutX="14.0" layoutY="135.0" prefHeight="341.0" prefWidth="498.0" styleClass="scene-body">
          <children>
             <RadioButton fx:id="easyModeRadio" layoutX="156.0" layoutY="91.0" mnemonicParsing="false" selected="true" text="Легко">
                <toggleGroup>
@@ -32,7 +32,7 @@
             <Label layoutX="33.0" layoutY="23.0" text="Сложность" />
          </children>
       </Pane>
-      <Pane layoutX="688.0" layoutY="135.0" prefHeight="341.0" prefWidth="498.0" styleClass="content-group-layout">
+      <Pane layoutX="688.0" layoutY="135.0" prefHeight="341.0" prefWidth="498.0" styleClass="scene-body">
          <children>
             <CheckBox fx:id="userSettingCheckBox" layoutX="27.0" layoutY="20.0" mnemonicParsing="false" text="Пльзовательские настройки" />
             <TextField fx:id="bombCount" editable="false" layoutX="83.0" layoutY="130.0" prefHeight="41.0" prefWidth="388.0" />

@@ -46,6 +46,6 @@ public class Constants {
 
     @Getter
     @Setter
-    private static ResourceBundle languageBundle;
+    private static Properties languageBundle;
 
 }

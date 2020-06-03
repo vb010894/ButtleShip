@@ -1,8 +1,30 @@
 package ru.vdzinovev.Tools;
 
+import javafx.animation.Animation;
+import javafx.collections.ObservableList;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Group;
+import javafx.scene.Node;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Alert;
+import javafx.scene.control.Button;
+import javafx.scene.control.ButtonType;
+import javafx.scene.control.TextArea;
+import javafx.scene.layout.Pane;
+import ru.vdzinovev.Controllers.Scenes.StartWindowController;
+import ru.vdzinovev.Enums.MessageType;
 
+import java.beans.Expression;
+import java.io.IOException;
+import java.lang.reflect.Executable;
+import java.lang.reflect.Method;
+import java.nio.file.attribute.GroupPrincipal;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
 
 /**
  * Класс инструментов для приложения.
@@ -91,6 +113,172 @@ public final class Tools {
                                             .append(stack)
                                             .append("\r\n"));
         return builder.toString();
+    }
+
+
+    public static void showMessage(final MessageType type,
+                                   final String message) {
+        try {
+            Parent messageWindow = showMessage(
+                                                type.value(),
+                                                message);
+            Group group = groupScene(messageWindow);
+            GameAnimations.showFrame(group);
+        } catch (Exception ex) {
+            showCrashMessage(ex);
+        }
+    }
+
+    /**
+     * Показывают окна Предупреждения
+     * и Ошибки.
+     * @param type Тип сообщения
+     * @param message Выводимое сообщение
+     * @param yesButtonEvent Имя метода,
+     *  выполняемого при нажатии кнопки "Да"
+     * @param noButtonEvent Имя метода,
+     *  выполняемого при нажатии кнопки "Нет"
+     * @param obj Экземпляр контроллера сообщения
+     */
+    public static void showMessage(final MessageType type,
+                                   final String message,
+                                   final String  yesButtonEvent,
+                                   final String  noButtonEvent,
+                                   final Object obj) {
+        Parent messageWindow;
+        try {
+            messageWindow = showMessage(
+                    type.value(),
+                    message);
+            List<Node> buttons = messageWindow
+                    .getChildrenUnmodifiable()
+                    .stream()
+                    .filter(node -> node instanceof Button)
+                    .collect(Collectors.toList());
+
+            if (buttons.size() > 0) {
+                buttons.stream().forEach(node -> {
+                    if (((Button) node).getText().equals("Да")) {
+                        node.setOnMouseClicked(handler -> {
+                            try {
+                                Method yesMethod =
+                                        obj.getClass()
+                                           .getDeclaredMethod(yesButtonEvent);
+                                yesMethod.setAccessible(true);
+                                yesMethod.invoke(obj);
+
+                            } catch (Exception e) {
+                                showCrashMessage(e);
+                            }
+                        });
+                    } else {
+                        node.setOnMouseClicked(handler -> {
+                            try {
+                                Method noMethod =
+                                        obj.getClass()
+                                           .getDeclaredMethod(noButtonEvent);
+                                noMethod.setAccessible(true);
+                                noMethod.invoke(obj);
+                            } catch (Exception e) {
+                                showCrashMessage(e);
+                            }
+                        });
+                    }
+                });
+            } else {
+                throw new RuntimeException(
+                                            "Ошибка отображения окна "
+                                            + "информации");
+            }
+            Group group = groupScene(messageWindow);
+            GameAnimations.showFrame(group);
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            showCrashMessage(ex);
+        }
+    }
+
+    /**
+     * Инициализирует сцену сообщений.
+     * @param scenePath Путь к файлу сцены
+     * @param message Сообщение
+     * @return Сцена
+     * @throws Exception Пропуск исключений
+     */
+    private static Parent showMessage(final String scenePath,
+                                      final String message)
+    throws Exception {
+        Parent messageFrame =
+                FXMLLoader.load(Tools
+                                .class
+                                .getResource(scenePath));
+
+            ObservableList<Node> children = messageFrame
+                                            .getChildrenUnmodifiable();
+
+            Optional<Node> messageField =
+                                        children
+                                        .stream()
+                                        .filter(node -> node
+                                                        instanceof TextArea)
+                                        .findAny();
+
+        if (messageField.isPresent()) {
+
+            TextArea area = (TextArea)  messageField
+                                        .stream()
+                                        .collect(Collectors.toList())
+                                        .get(0);
+            area.setText(message);
+        } else {
+            throw new RuntimeException("Не найдено поле вывода ошибки");
+        }
+
+        TextArea area = (TextArea) children.get(2);
+        area.setText(message);
+
+        return messageFrame;
+    }
+
+    /**
+     * Группирует сцену.
+     * @param rootPane Сцена
+     * @return Группировка
+     */
+    private static Group groupScene(final Parent rootPane) {
+        Group group = new Group(rootPane);
+        Pane content = StartWindowController
+                .getTargetContent();
+        group.setLayoutX(content.getPrefWidth() / 2 - 200);
+        group.setLayoutY(content.getPrefHeight() / 2 - 100);
+        group.setId("messageScene");
+        content.getChildren().add(group);
+
+        return group;
+    }
+
+    /**
+     * Выволит crash сообщение.
+     * @param throwable Исключение.
+     */
+    private static void showCrashMessage(final Throwable throwable) {
+        Alert alert = new Alert(Alert.AlertType.ERROR);
+        alert.setTitle("Ошибка");
+        alert.setHeaderText("Ошибка основного фрейма вывода");
+        alert.setContentText("Сообщение:\r\n"
+                            + throwable.getMessage());
+        alert.getButtonTypes().clear();
+        ButtonType okButton = new ButtonType("OK");
+        alert.getButtonTypes().add(okButton);
+        Optional<ButtonType> buttonType = alert.showAndWait();
+
+        if (buttonType.isPresent()) {
+            if (buttonType.get() == okButton) System.exit(-1);
+        } else {
+            System.exit(-1);
+        }
+
+        alert.setOnCloseRequest(handler -> System.exit(-1));
     }
 
 }
